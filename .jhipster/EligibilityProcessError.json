@@ -1,0 +1,51 @@
+{
+  "fluentMethods": true,
+  "clientRootFolder": "DataProcessing",
+  "relationships": [
+
+  ],
+  "fields": [
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastModifiedDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "sourceId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "refId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemCount",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "validationError",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20210117150309",
+  "dto": "mapstruct",
+  "searchEngine": false,
+  "service": "serviceImpl",
+  "entityTableName": "eligibility_process_error",
+  "databaseType": "sql",
+  "readOnly": true,
+  "jpaMetamodelFiltering": true,
+  "pagination": "infinite-scroll",
+  "microserviceName": "DataProcessing"
+}

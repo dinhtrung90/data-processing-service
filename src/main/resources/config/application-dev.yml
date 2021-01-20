@@ -27,12 +27,18 @@ eureka:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 
 spring:
+  flyway:
+    out-of-order: true
+    locations: classpath:db/migration
+    enabled: true
+
   profiles:
     active: dev
     include:
       - swagger
       # Uncomment to activate TLS for the dev profile
       #- tls
+      - no-liquibase
   devtools:
     restart:
       enabled: true
@@ -46,7 +52,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/DataProcessing?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-    password:
+    password: root123456
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -60,6 +66,7 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+    enabled: false
   mail:
     host: localhost
     port: 25
@@ -78,6 +85,13 @@ spring:
     locator:
       discovery:
         enabled: true
+  batch:
+    job:
+      enabled: false
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
 
 server:
   port: 8082
@@ -131,3 +145,15 @@ jhipster:
 # ===================================================================
 
 # application:
+server-uploads:
+  cloudinary:
+    cloudinary_url: cloudinary://868559836586836:x7ha43lE_-vTt2AHxNmt8yphHmw@tvsales
+    cloud_name: tvsales
+    api_key: 868559836586836
+    api_secret: x7ha43lE_-vTt2AHxNmt8yphHmw
+  firebase:
+    bucket-name: tvsales-fa493.appspot.com
+    bucket-url: tvsales-fa493.appspot.com
+    image-url: https://storage.googleapis.com
+    project-id: tvsales-fa493
+    config-file: tvsales-config-admin.json

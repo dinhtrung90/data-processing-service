@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity EligibilityProcessError.
+    -->
+    <changeSet id="20210117150309-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="eligibility_id"
+                                 baseTableName="eligibility_process_error"
+                                 constraintName="fk_eligibility_process_error_eligibility_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="eligibility"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -16,9 +16,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+import org.springframework.kafka.annotation.EnableKafka;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
+@EnableKafka
 public class DataProcessingApp {
     private static final Logger log = LoggerFactory.getLogger(DataProcessingApp.class);
 

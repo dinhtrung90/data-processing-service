@@ -10,6 +10,7 @@ public final class Constants {
     public static final String SYSTEM_ACCOUNT = "system";
     public static final String DEFAULT_LANGUAGE = "en";
     public static final String ANONYMOUS_USER = "anonymoususer";
-
+    public static final String JOB_PARAM_FILE_NAME = "Param-file-name";
+    public static final String FILE_REF_ID = "file-ref-id";
     private Constants() {}
 }

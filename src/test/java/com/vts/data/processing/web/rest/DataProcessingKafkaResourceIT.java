@@ -104,7 +104,7 @@ class DataProcessingKafkaResourceIT {
     private Map<String, String> getProducerProps() {
         Map<String, String> producerProps = new HashMap<>();
         producerProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        producerProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        producerProps.put("value.serializer", "org.springframework.kafka.support.serializer.JsonSerializer");
         producerProps.put("bootstrap.servers", kafkaContainer.getBootstrapServers());
         return producerProps;
     }
@@ -112,7 +112,7 @@ class DataProcessingKafkaResourceIT {
     private Map<String, String> getConsumerProps(String group) {
         Map<String, String> consumerProps = new HashMap<>();
         consumerProps.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        consumerProps.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        consumerProps.put("value.deserializer", "org.springframework.kafka.support.serializer.JsonSerializer");
         consumerProps.put("bootstrap.servers", kafkaContainer.getBootstrapServers());
         consumerProps.put("auto.offset.reset", "earliest");
         consumerProps.put("group.id", group);

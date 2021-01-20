@@ -83,6 +83,8 @@ public class CacheConfiguration {
             createCache(cm, com.vts.data.processing.domain.User.class.getName(), jcacheConfiguration);
             createCache(cm, com.vts.data.processing.domain.Authority.class.getName(), jcacheConfiguration);
             createCache(cm, com.vts.data.processing.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            createCache(cm, com.vts.data.processing.domain.Eligibility.class.getName(), jcacheConfiguration);
+            createCache(cm, com.vts.data.processing.domain.EligibilityProcessError.class.getName(), jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }
