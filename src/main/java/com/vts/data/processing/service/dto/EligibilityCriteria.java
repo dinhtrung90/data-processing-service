@@ -41,10 +41,10 @@ public class EligibilityCriteria implements Serializable, Criteria {
 
     private InstantFilter lastModifiedDate;
 
-    public EligibilityCriteria() {
+    public EligibilityCriteria(){
     }
 
-    public EligibilityCriteria(EligibilityCriteria other) {
+    public EligibilityCriteria(EligibilityCriteria other){
         this.id = other.id == null ? null : other.id.copy();
         this.fileName = other.fileName == null ? null : other.fileName.copy();
         this.refId = other.refId == null ? null : other.refId.copy();
@@ -159,7 +159,6 @@ public class EligibilityCriteria implements Serializable, Criteria {
         );
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "EligibilityCriteria{" +

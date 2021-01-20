@@ -1,13 +1,13 @@
 package com.vts.data.processing.service.dto;
-
 import java.time.Instant;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A DTO for the {@link com.vts.data.processing.domain.Eligibility} entity.
  */
 public class EligibilityDTO implements Serializable {
-    
+
     private Long id;
 
     private String fileName;
@@ -24,7 +24,7 @@ public class EligibilityDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
-    
+
     public Long getId() {
         return id;
     }
@@ -94,19 +94,22 @@ public class EligibilityDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof EligibilityDTO)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        return id != null && id.equals(((EligibilityDTO) o).id);
+        EligibilityDTO eligibilityDTO = (EligibilityDTO) o;
+        if (eligibilityDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), eligibilityDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(getId());
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "EligibilityDTO{" +

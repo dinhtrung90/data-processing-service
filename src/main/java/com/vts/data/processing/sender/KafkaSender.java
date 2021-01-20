@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaSender {
 
-    public static final String EMPLOYEE = "EMPLOYEE";
+    public static final String EMPLOYEE = "EMPLOYEE_";
     private final Logger log = LoggerFactory.getLogger(KafkaSender.class);
 
     @Autowired

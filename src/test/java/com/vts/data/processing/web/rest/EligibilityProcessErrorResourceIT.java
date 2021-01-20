@@ -8,39 +8,40 @@ import com.vts.data.processing.repository.EligibilityProcessErrorRepository;
 import com.vts.data.processing.service.EligibilityProcessErrorService;
 import com.vts.data.processing.service.dto.EligibilityProcessErrorDTO;
 import com.vts.data.processing.service.mapper.EligibilityProcessErrorMapper;
+import com.vts.data.processing.web.rest.errors.ExceptionTranslator;
 import com.vts.data.processing.service.dto.EligibilityProcessErrorCriteria;
 import com.vts.data.processing.service.EligibilityProcessErrorQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
+
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.vts.data.processing.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link EligibilityProcessErrorResource} REST controller.
  */
-@SpringBootTest(classes = { DataProcessingApp.class, TestSecurityConfiguration.class })
-@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
-@AutoConfigureMockMvc
-@WithMockUser
+@SpringBootTest(classes = {DataProcessingApp.class, TestSecurityConfiguration.class})
+@ExtendWith(RedisTestContainerExtension.class)
 public class EligibilityProcessErrorResourceIT {
 
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
@@ -81,12 +82,35 @@ public class EligibilityProcessErrorResourceIT {
     private EligibilityProcessErrorQueryService eligibilityProcessErrorQueryService;
 
     @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
+    private Validator validator;
+
     private MockMvc restEligibilityProcessErrorMockMvc;
 
     private EligibilityProcessError eligibilityProcessError;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final EligibilityProcessErrorResource eligibilityProcessErrorResource = new EligibilityProcessErrorResource(eligibilityProcessErrorService, eligibilityProcessErrorQueryService);
+        this.restEligibilityProcessErrorMockMvc = MockMvcBuilders.standaloneSetup(eligibilityProcessErrorResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
+    }
 
     /**
      * Create an entity for this test.
@@ -139,7 +163,7 @@ public class EligibilityProcessErrorResourceIT {
         // Get all the eligibilityProcessErrorList
         restEligibilityProcessErrorMockMvc.perform(get("/api/eligibility-process-errors?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(eligibilityProcessError.getId().intValue())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
@@ -160,7 +184,7 @@ public class EligibilityProcessErrorResourceIT {
         // Get the eligibilityProcessError
         restEligibilityProcessErrorMockMvc.perform(get("/api/eligibility-process-errors/{id}", eligibilityProcessError.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(eligibilityProcessError.getId().intValue()))
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY))
             .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
@@ -796,7 +820,7 @@ public class EligibilityProcessErrorResourceIT {
     private void defaultEligibilityProcessErrorShouldBeFound(String filter) throws Exception {
         restEligibilityProcessErrorMockMvc.perform(get("/api/eligibility-process-errors?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(eligibilityProcessError.getId().intValue())))
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
@@ -810,7 +834,7 @@ public class EligibilityProcessErrorResourceIT {
         // Check, that the count call also returns 1
         restEligibilityProcessErrorMockMvc.perform(get("/api/eligibility-process-errors/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(content().string("1"));
     }
 
@@ -820,16 +844,17 @@ public class EligibilityProcessErrorResourceIT {
     private void defaultEligibilityProcessErrorShouldNotBeFound(String filter) throws Exception {
         restEligibilityProcessErrorMockMvc.perform(get("/api/eligibility-process-errors?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
         restEligibilityProcessErrorMockMvc.perform(get("/api/eligibility-process-errors/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(content().string("0"));
     }
+
 
     @Test
     @Transactional

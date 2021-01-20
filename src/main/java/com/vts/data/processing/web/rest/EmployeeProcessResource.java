@@ -80,15 +80,14 @@ public class EmployeeProcessResource {
         String extensionRemoved = name.split("\\.")[0];
 
         // store metadata db
-        Eligibility eligibility =  Eligibility.builder()
+        Eligibility eligibility =  new Eligibility()
             .createdBy(currentUserLogin)
             .createdDate(Instant.now())
             .fileName(name)
             .fileUrl(url)
             .lastModifiedBy(currentUserLogin)
             .lastModifiedDate(Instant.now())
-            .refId(extensionRemoved)
-            .build();
+            .refId(extensionRemoved);
         eligibilityRepository.save(eligibility);
 
         //process import

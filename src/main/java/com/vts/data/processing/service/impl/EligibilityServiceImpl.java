@@ -33,6 +33,12 @@ public class EligibilityServiceImpl implements EligibilityService {
         this.eligibilityMapper = eligibilityMapper;
     }
 
+    /**
+     * Save a eligibility.
+     *
+     * @param eligibilityDTO the entity to save.
+     * @return the persisted entity.
+     */
     @Override
     public EligibilityDTO save(EligibilityDTO eligibilityDTO) {
         log.debug("Request to save Eligibility : {}", eligibilityDTO);
@@ -41,6 +47,12 @@ public class EligibilityServiceImpl implements EligibilityService {
         return eligibilityMapper.toDto(eligibility);
     }
 
+    /**
+     * Get all the eligibilities.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<EligibilityDTO> findAll(Pageable pageable) {
@@ -50,6 +62,12 @@ public class EligibilityServiceImpl implements EligibilityService {
     }
 
 
+    /**
+     * Get one eligibility by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
     @Override
     @Transactional(readOnly = true)
     public Optional<EligibilityDTO> findOne(Long id) {
@@ -58,6 +76,11 @@ public class EligibilityServiceImpl implements EligibilityService {
             .map(eligibilityMapper::toDto);
     }
 
+    /**
+     * Delete the eligibility by id.
+     *
+     * @param id the id of the entity.
+     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Eligibility : {}", id);

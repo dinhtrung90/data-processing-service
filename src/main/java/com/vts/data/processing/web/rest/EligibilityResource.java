@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,9 @@ public class EligibilityResource {
     /**
      * {@code GET  /eligibilities} : get all the eligibilities.
      *
+
      * @param pageable the pagination information.
+
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of eligibilities in body.
      */
@@ -59,11 +62,11 @@ public class EligibilityResource {
     }
 
     /**
-     * {@code GET  /eligibilities/count} : count all the eligibilities.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
+    * {@code GET  /eligibilities/count} : count all the eligibilities.
+    *
+    * @param criteria the criteria which the requested entities should match.
+    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+    */
     @GetMapping("/eligibilities/count")
     public ResponseEntity<Long> countEligibilities(EligibilityCriteria criteria) {
         log.debug("REST request to count Eligibilities by criteria: {}", criteria);

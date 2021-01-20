@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,9 @@ public class EligibilityProcessErrorResource {
     /**
      * {@code GET  /eligibility-process-errors} : get all the eligibilityProcessErrors.
      *
+
      * @param pageable the pagination information.
+
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of eligibilityProcessErrors in body.
      */
@@ -59,11 +62,11 @@ public class EligibilityProcessErrorResource {
     }
 
     /**
-     * {@code GET  /eligibility-process-errors/count} : count all the eligibilityProcessErrors.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
+    * {@code GET  /eligibility-process-errors/count} : count all the eligibilityProcessErrors.
+    *
+    * @param criteria the criteria which the requested entities should match.
+    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+    */
     @GetMapping("/eligibility-process-errors/count")
     public ResponseEntity<Long> countEligibilityProcessErrors(EligibilityProcessErrorCriteria criteria) {
         log.debug("REST request to count EligibilityProcessErrors by criteria: {}", criteria);

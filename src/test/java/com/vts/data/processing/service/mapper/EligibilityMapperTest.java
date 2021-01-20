@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 public class EligibilityMapperTest {
 
     private EligibilityMapper eligibilityMapper;
@@ -15,7 +16,7 @@ public class EligibilityMapperTest {
 
     @Test
     public void testEntityFromId() {
-        Long id = 1L;
+        Long id = 2L;
         assertThat(eligibilityMapper.fromId(id).getId()).isEqualTo(id);
         assertThat(eligibilityMapper.fromId(null)).isNull();
     }

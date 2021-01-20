@@ -43,10 +43,10 @@ public class EligibilityProcessErrorCriteria implements Serializable, Criteria {
 
     private StringFilter validationError;
 
-    public EligibilityProcessErrorCriteria() {
+    public EligibilityProcessErrorCriteria(){
     }
 
-    public EligibilityProcessErrorCriteria(EligibilityProcessErrorCriteria other) {
+    public EligibilityProcessErrorCriteria(EligibilityProcessErrorCriteria other){
         this.id = other.id == null ? null : other.id.copy();
         this.createdBy = other.createdBy == null ? null : other.createdBy.copy();
         this.createdDate = other.createdDate == null ? null : other.createdDate.copy();
@@ -172,7 +172,6 @@ public class EligibilityProcessErrorCriteria implements Serializable, Criteria {
         );
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "EligibilityProcessErrorCriteria{" +

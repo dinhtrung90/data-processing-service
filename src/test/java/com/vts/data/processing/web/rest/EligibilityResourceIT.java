@@ -8,39 +8,40 @@ import com.vts.data.processing.repository.EligibilityRepository;
 import com.vts.data.processing.service.EligibilityService;
 import com.vts.data.processing.service.dto.EligibilityDTO;
 import com.vts.data.processing.service.mapper.EligibilityMapper;
+import com.vts.data.processing.web.rest.errors.ExceptionTranslator;
 import com.vts.data.processing.service.dto.EligibilityCriteria;
 import com.vts.data.processing.service.EligibilityQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Validator;
+
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static com.vts.data.processing.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link EligibilityResource} REST controller.
  */
-@SpringBootTest(classes = { DataProcessingApp.class, TestSecurityConfiguration.class })
-@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
-@AutoConfigureMockMvc
-@WithMockUser
+@SpringBootTest(classes = {DataProcessingApp.class, TestSecurityConfiguration.class})
+@ExtendWith(RedisTestContainerExtension.class)
 public class EligibilityResourceIT {
 
     private static final String DEFAULT_FILE_NAME = "AAAAAAAAAA";
@@ -77,12 +78,35 @@ public class EligibilityResourceIT {
     private EligibilityQueryService eligibilityQueryService;
 
     @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
+    private Validator validator;
+
     private MockMvc restEligibilityMockMvc;
 
     private Eligibility eligibility;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        final EligibilityResource eligibilityResource = new EligibilityResource(eligibilityService, eligibilityQueryService);
+        this.restEligibilityMockMvc = MockMvcBuilders.standaloneSetup(eligibilityResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
+    }
 
     /**
      * Create an entity for this test.
@@ -133,7 +157,7 @@ public class EligibilityResourceIT {
         // Get all the eligibilityList
         restEligibilityMockMvc.perform(get("/api/eligibilities?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(eligibility.getId().intValue())))
             .andExpect(jsonPath("$.[*].fileName").value(hasItem(DEFAULT_FILE_NAME)))
             .andExpect(jsonPath("$.[*].refId").value(hasItem(DEFAULT_REF_ID)))
@@ -153,7 +177,7 @@ public class EligibilityResourceIT {
         // Get the eligibility
         restEligibilityMockMvc.perform(get("/api/eligibilities/{id}", eligibility.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(eligibility.getId().intValue()))
             .andExpect(jsonPath("$.fileName").value(DEFAULT_FILE_NAME))
             .andExpect(jsonPath("$.refId").value(DEFAULT_REF_ID))
@@ -683,7 +707,7 @@ public class EligibilityResourceIT {
     private void defaultEligibilityShouldBeFound(String filter) throws Exception {
         restEligibilityMockMvc.perform(get("/api/eligibilities?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(eligibility.getId().intValue())))
             .andExpect(jsonPath("$.[*].fileName").value(hasItem(DEFAULT_FILE_NAME)))
             .andExpect(jsonPath("$.[*].refId").value(hasItem(DEFAULT_REF_ID)))
@@ -696,7 +720,7 @@ public class EligibilityResourceIT {
         // Check, that the count call also returns 1
         restEligibilityMockMvc.perform(get("/api/eligibilities/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(content().string("1"));
     }
 
@@ -706,16 +730,17 @@ public class EligibilityResourceIT {
     private void defaultEligibilityShouldNotBeFound(String filter) throws Exception {
         restEligibilityMockMvc.perform(get("/api/eligibilities?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
         restEligibilityMockMvc.perform(get("/api/eligibilities/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(content().string("0"));
     }
+
 
     @Test
     @Transactional

@@ -33,6 +33,12 @@ public class EligibilityProcessErrorServiceImpl implements EligibilityProcessErr
         this.eligibilityProcessErrorMapper = eligibilityProcessErrorMapper;
     }
 
+    /**
+     * Save a eligibilityProcessError.
+     *
+     * @param eligibilityProcessErrorDTO the entity to save.
+     * @return the persisted entity.
+     */
     @Override
     public EligibilityProcessErrorDTO save(EligibilityProcessErrorDTO eligibilityProcessErrorDTO) {
         log.debug("Request to save EligibilityProcessError : {}", eligibilityProcessErrorDTO);
@@ -41,6 +47,12 @@ public class EligibilityProcessErrorServiceImpl implements EligibilityProcessErr
         return eligibilityProcessErrorMapper.toDto(eligibilityProcessError);
     }
 
+    /**
+     * Get all the eligibilityProcessErrors.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<EligibilityProcessErrorDTO> findAll(Pageable pageable) {
@@ -50,6 +62,12 @@ public class EligibilityProcessErrorServiceImpl implements EligibilityProcessErr
     }
 
 
+    /**
+     * Get one eligibilityProcessError by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
     @Override
     @Transactional(readOnly = true)
     public Optional<EligibilityProcessErrorDTO> findOne(Long id) {
@@ -58,6 +76,11 @@ public class EligibilityProcessErrorServiceImpl implements EligibilityProcessErr
             .map(eligibilityProcessErrorMapper::toDto);
     }
 
+    /**
+     * Delete the eligibilityProcessError by id.
+     *
+     * @param id the id of the entity.
+     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete EligibilityProcessError : {}", id);

@@ -1,6 +1,4 @@
 package com.vts.data.processing.domain;
-
-import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -8,21 +6,13 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A Eligibility.
  */
 @Entity
 @Table(name = "vts_eligibility")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Getter
-@Setter
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Eligibility implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +42,134 @@ public class Eligibility implements Serializable {
     @Column(name = "last_modified_date")
     private Instant lastModifiedDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "eligibility")
-    private List<EligibilityProcessError> eligibilityProcessErrors = new ArrayList<>();
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public Eligibility fileName(String fileName) {
+        this.fileName = fileName;
+        return this;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getRefId() {
+        return refId;
+    }
+
+    public Eligibility refId(String refId) {
+        this.refId = refId;
+        return this;
+    }
+
+    public void setRefId(String refId) {
+        this.refId = refId;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public Eligibility fileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+        return this;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public Eligibility createdBy(String createdBy) {
+        this.createdBy = createdBy;
+        return this;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public Eligibility createdDate(Instant createdDate) {
+        this.createdDate = createdDate;
+        return this;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public Eligibility lastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+        return this;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public Eligibility lastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+        return this;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Eligibility)) {
+            return false;
+        }
+        return id != null && id.equals(((Eligibility) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "Eligibility{" +
+            "id=" + getId() +
+            ", fileName='" + getFileName() + "'" +
+            ", refId='" + getRefId() + "'" +
+            ", fileUrl='" + getFileUrl() + "'" +
+            ", createdBy='" + getCreatedBy() + "'" +
+            ", createdDate='" + getCreatedDate() + "'" +
+            ", lastModifiedBy='" + getLastModifiedBy() + "'" +
+            ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            "}";
+    }
 }

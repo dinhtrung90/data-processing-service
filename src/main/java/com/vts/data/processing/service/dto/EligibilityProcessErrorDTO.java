@@ -1,13 +1,13 @@
 package com.vts.data.processing.service.dto;
-
 import java.time.Instant;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A DTO for the {@link com.vts.data.processing.domain.EligibilityProcessError} entity.
  */
 public class EligibilityProcessErrorDTO implements Serializable {
-    
+
     private Long id;
 
     private String createdBy;
@@ -26,7 +26,7 @@ public class EligibilityProcessErrorDTO implements Serializable {
 
     private String validationError;
 
-    
+
     public Long getId() {
         return id;
     }
@@ -104,19 +104,22 @@ public class EligibilityProcessErrorDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof EligibilityProcessErrorDTO)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        return id != null && id.equals(((EligibilityProcessErrorDTO) o).id);
+        EligibilityProcessErrorDTO eligibilityProcessErrorDTO = (EligibilityProcessErrorDTO) o;
+        if (eligibilityProcessErrorDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), eligibilityProcessErrorDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(getId());
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "EligibilityProcessErrorDTO{" +
