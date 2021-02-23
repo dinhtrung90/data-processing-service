@@ -42,7 +42,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/DataProcessing?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-    password:
+    password: Pa55w0rd
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -73,6 +73,11 @@ spring:
     locator:
       discovery:
         enabled: true
+  profiles:
+    active: prod
+    include:
+      - swagger
+      - no-liquibase
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
