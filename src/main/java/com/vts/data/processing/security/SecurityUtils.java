@@ -79,15 +79,27 @@ public final class SecurityUtils {
     }
 
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
-        return mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
+        return mapRolesToGrantedAuthorities(getRolesFromCognitoClaims(claims));
     }
 
-    @SuppressWarnings("unchecked")
-    private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
-        return (Collection<String>) claims.getOrDefault("groups", claims.getOrDefault("roles", new ArrayList<>()));
-    }
+//    public static Collection<? extends GrantedAuthority> extractAuthorityFromAttributes(Map<String, Object> attributes) {
+//        return mapRolesToGrantedAuthorities((Collection<String>) attributes.getOrDefault("cognito:groups", new ArrayList<>()));
+//    }
+
+//    @SuppressWarnings("unchecked")
+//    private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
+//        return (Collection<String>) claims.getOrDefault("groups",
+//            claims.getOrDefault("roles", new ArrayList<>()));
+//    }
 
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
-        return roles.stream().filter(role -> role.startsWith("ROLE_")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return roles.stream()
+            .filter(role -> role.startsWith("ROLE_"))
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
+    }
+
+    private static Collection<String> getRolesFromCognitoClaims(Map<String, Object> attributes) {
+        return (Collection<String>) attributes.getOrDefault("cognito:groups", new ArrayList<>());
     }
 }

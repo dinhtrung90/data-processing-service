@@ -160,11 +160,11 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: http://localhost:9080/auth/realms/jhipster
+            issuer-uri: https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_KLeHTBUFR
         registration:
           oidc:
-            client-id: internal
-            client-secret: internal
+            client-id: 22p22m43lkckvv08g1poqljkcd
+            client-secret: 16rglv9ba66g9c7j0pegililcb6g8gaj48f35mlfrvd6j0k2daul
 
 server:
   servlet:
@@ -211,7 +211,7 @@ jhipster:
     oauth2:
       audience:
         - account
-        - api://default
+        - 22p22m43lkckvv08g1poqljkcd
 kafka:
   bootstrap-servers: localhost:9092
   consumer:
