@@ -1,1 +1,1 @@
-./mvnw -Pprod package verify jib:dockerBuild --offline
+./mvnw -Pprod package verify jib:dockerBuild
