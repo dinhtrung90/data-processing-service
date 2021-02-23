@@ -78,6 +78,9 @@ spring:
     include:
       - swagger
       - no-liquibase
+  batch:
+    job:
+      enabled: false
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
