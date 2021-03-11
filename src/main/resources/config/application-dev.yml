@@ -50,7 +50,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://${app.mysql-url}:3306/DataProcessing?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://${app.mysql-url}:3306/DataProcessing?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: Pa55w0rd
     hikari:
@@ -93,6 +93,15 @@ spring:
       max-request-size: 10MB
       max-file-size: 10MB
 
+
+  kafka:
+    producer:
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
 server:
   port: 8082
 
@@ -157,3 +166,4 @@ server-uploads:
     image-url: https://storage.googleapis.com
     project-id: tvsales-fa493
     config-file: tvsales-config-admin.json
+

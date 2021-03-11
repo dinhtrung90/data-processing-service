@@ -10,7 +10,7 @@ jhipster:
 app:
   registry-url: 51.79.207.208
   redis-url: 51.79.207.208
-  kafka-url: 51.79.207.208
+  kafka-url: localhost
   mysql-url: 51.79.207.208
 
 spring:
